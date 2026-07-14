@@ -34,20 +34,21 @@ async function agregarEstadoIdAHabitaciones() {
 
   if (tieneEstadoAntiguo) {
     await sequelize.query(`
-      UPDATE habitaciones h
-      INNER JOIN estados_habitacion e ON e.codigo = h.estado
-      SET h.estado_id = e.id
-      WHERE h.estado_id IS NULL
+      UPDATE habitaciones AS h
+      SET estado_id = e.id
+      FROM estados_habitacion AS e
+      WHERE e.codigo = h.estado
+      AND h.estado_id IS NULL
     `);
 
     console.log('Estados antiguos migrados hacia estado_id');
   }
 
   await sequelize.query(`
-    UPDATE habitaciones h
-    SET h.estado_id = (
+    UPDATE habitaciones AS h
+    SET estado_id = (
       SELECT e.id
-      FROM estados_habitacion e
+      FROM estados_habitacion AS e
       WHERE e.codigo = 'DISPONIBLE'
       LIMIT 1
     )
@@ -69,7 +70,6 @@ async function agregarEstadoIdAHabitaciones() {
 
   console.log('estado_id de habitaciones configurado correctamente');
 }
-
 
 async function actualizarReservacionesExtras() {
   await agregarColumnaSiNoExiste('reservaciones', 'cantidad_personas_extra', {

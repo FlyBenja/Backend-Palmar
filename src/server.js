@@ -1,13 +1,15 @@
+require('dotenv').config();
+
 const app = require('./app');
 const sequelize = require('./config/database');
-require('dotenv').config();
 
 const PORT = process.env.PORT || 3000;
 
 async function main() {
   try {
     await sequelize.authenticate();
-    console.log('Conexión a MySQL exitosa');
+
+    console.log('Conexión a Neon PostgreSQL exitosa');
 
     app.listen(PORT, () => {
       console.log(`Servidor corriendo en http://localhost:${PORT}`);
@@ -15,6 +17,7 @@ async function main() {
     });
   } catch (error) {
     console.error('Error al iniciar el servidor:', error);
+    process.exit(1);
   }
 }
 

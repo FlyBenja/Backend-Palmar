@@ -15,7 +15,8 @@ app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 app.get('/', (req, res) => {
   res.json({
-    message: 'API Sistema Palmar funcionando'
+    message: 'API Sistema Palmar funcionando',
+    database: 'Neon PostgreSQL'
   });
 });
 
